@@ -40,7 +40,7 @@ function Navbar() {
 
   return (
     <AppBar
-      position="fixed"
+      position="static"
       color="transparent"
       sx={{ boxShadow: 0, px: "36px" }}
     >

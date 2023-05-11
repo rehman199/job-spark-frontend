@@ -2,7 +2,7 @@
 import { Box, Typography } from "@mui/material";
 import Image from "next/image";
 import landingImage from "public/job-spark-landing.png";
-import { JobSearchBar } from "./components/home";
+import { JobSearchBar } from "../components/home";
 
 export default function Home() {
   return (
@@ -12,7 +12,7 @@ export default function Home() {
       alignItems="start"
       justifyContent="center"
       padding="0 64px"
-      height="100%"
+      height="90%"
       flexDirection="column"
       position="relative"
     >

@@ -6,6 +6,7 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+  font-size: 16px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -17,9 +18,8 @@
 }
 
 body {
-  font-size: 16px;
   color: black;
-  background: #F8F9FA;
+  background: #F2F4F6;
   height: 100vh;
   margin: 0;
   padding: 0;
@@ -28,5 +28,11 @@ body {
 @media screen and (max-width: 900px) {
   #landing-page-image {
     top: 0% !important;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  :root {
+    font-size: 13px;
   }
 }
