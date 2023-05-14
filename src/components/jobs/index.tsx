@@ -1,3 +1,4 @@
 import Job from "./job";
+import JobFilters from "./job-filters";
 
-export { Job };
+export { Job, JobFilters };
