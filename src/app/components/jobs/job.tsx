@@ -7,7 +7,7 @@ import {
 import { Box, Button, Chip, Typography } from "@mui/material";
 import Image from "next/image";
 import React from "react";
-import placeholder from "../../../public/next-js-logo.png";
+import placeholder from "../../../../public/next-js-logo.png";
 
 const Job = () => {
   return (
