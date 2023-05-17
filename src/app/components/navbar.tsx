@@ -38,6 +38,8 @@ function Navbar() {
     setAnchorElUser(null);
   };
 
+  const isAuthPage = window.location.href.includes("/auth");
+
   return (
     <AppBar
       position="static"
@@ -94,11 +96,12 @@ function Navbar() {
                 display: { xs: "block", md: "none" },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
+              {!isAuthPage &&
+                pages.map((page) => (
+                  <MenuItem key={page} onClick={handleCloseNavMenu}>
+                    <Typography textAlign="center">{page}</Typography>
+                  </MenuItem>
+                ))}
             </Menu>
           </Box>
           <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
@@ -127,20 +130,21 @@ function Navbar() {
               justifyContent: "flex-end",
             }}
           >
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{
-                  my: 2,
-                  color: "#8A8A8A",
-                  display: "block",
-                  textTransform: "none",
-                }}
-              >
-                {page}
-              </Button>
-            ))}
+            {!isAuthPage &&
+              pages.map((page) => (
+                <Button
+                  key={page}
+                  onClick={handleCloseNavMenu}
+                  sx={{
+                    my: 2,
+                    color: "#8A8A8A",
+                    display: "block",
+                    textTransform: "none",
+                  }}
+                >
+                  {page}
+                </Button>
+              ))}
           </Box>
 
           {false && (

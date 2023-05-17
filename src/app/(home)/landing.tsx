@@ -1,9 +1,9 @@
 "use client";
 import { Box, Typography } from "@mui/material";
 import React from "react";
-import { JobSearchBar } from "../components/home";
 import Image from "next/image";
 import landingImage from "public/job-spark-landing.png";
+import JobSearchBar from "./job-search-bar";
 
 const Landing = () => {
   return (

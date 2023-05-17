@@ -2,7 +2,8 @@
 import { Box, Typography, Pagination } from "@mui/material";
 import { uniqueId } from "lodash";
 import React, { useState } from "react";
-import { Job, JobFilters } from "../components/jobs";
+import JobFilters from "./job-filters";
+import Job from "./job";
 
 const Jobs = () => {
   const [page, updatePage] = useState<number>(1);

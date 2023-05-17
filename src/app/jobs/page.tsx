@@ -1,4 +1,4 @@
-import Jobs from "../pages/jobs";
+import Jobs from "./jobs";
 
 const JobsPage = () => {
   return <Jobs />;
