@@ -1,14 +1,32 @@
 "use client";
 import { BlackButton } from "@/app/components";
+import PasswordChecker from "@/app/components/password-checker";
+import useAuth from "@/app/hooks/use-auth";
 import { Box, InputLabel, TextField, Typography } from "@mui/material";
 
 const SignUp = () => {
+  const { signupValues, onSignupValuesChange, register } = useAuth({
+    name: "",
+    email: "",
+    password: "",
+    password_confirmation: "",
+    confirm_success_url: "",
+  });
+
+  const isFormIncomplete = (): boolean =>
+    !(
+      signupValues.password.match(
+        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$/
+      ) && signupValues.password_confirmation === signupValues.password
+    );
   return (
     <Box
+      component="form"
       display="flex"
       justifyContent="center"
       alignItems="center"
       py="4rem"
+      onSubmit={register}
       px={{ xs: "3rem", md: "0" }}
     >
       <Box
@@ -35,7 +53,9 @@ const SignUp = () => {
             fullWidth
             size="small"
             variant="outlined"
-            sx={{ "& > div:first-child": { borderRadius: "8px" } }}
+            value={signupValues.name}
+            onChange={onSignupValuesChange}
+            sx={{ "& > div:first-of-type": { borderRadius: "8px" } }}
           />
         </Box>
         <Box display="flex" flexDirection="column" width="100%" my=".5rem">
@@ -48,7 +68,9 @@ const SignUp = () => {
             fullWidth
             size="small"
             variant="outlined"
-            sx={{ "& > div:first-child": { borderRadius: "8px" } }}
+            value={signupValues.email}
+            onChange={onSignupValuesChange}
+            sx={{ "& > div:first-of-type": { borderRadius: "8px" } }}
           />
         </Box>
         <Box display="flex" flexDirection="column" width="100%" my=".5rem">
@@ -61,8 +83,13 @@ const SignUp = () => {
             fullWidth
             size="small"
             variant="outlined"
-            sx={{ "& > div:first-child": { borderRadius: "8px" } }}
+            sx={{ "& > div:first-of-type": { borderRadius: "8px" } }}
+            value={signupValues.password}
+            onChange={onSignupValuesChange}
           />
+        </Box>
+        <Box display="flex" flexDirection="column" width="100%" my=".5rem">
+          <PasswordChecker value={signupValues.password} />
         </Box>
         <Box display="flex" flexDirection="column" width="100%" my=".5rem">
           <InputLabel shrink htmlFor="email">
@@ -74,13 +101,25 @@ const SignUp = () => {
             fullWidth
             size="small"
             variant="outlined"
-            sx={{ "& > div:first-child": { borderRadius: "8px" } }}
+            value={signupValues.password_confirmation}
+            onChange={onSignupValuesChange}
+            sx={{ "& > div:first-of-type": { borderRadius: "8px" } }}
           />
         </Box>
         <Box display="flex" flexDirection="column" width="100%" my=".5rem">
-          <BlackButton type="submit" variant="contained">
-            Sign in
+          <BlackButton
+            type="submit"
+            variant="contained"
+            disabled={isFormIncomplete()}
+          >
+            Sign up
           </BlackButton>
+        </Box>
+        <Box display="flex" flexDirection="column" width="100%" my=".5rem">
+          <Typography component="p" fontSize=".75rem">
+            By creating an account, you agree to the Terms of use and Privacy
+            Policy.
+          </Typography>
         </Box>
       </Box>
     </Box>
