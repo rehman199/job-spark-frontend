@@ -2,22 +2,26 @@
 import { BlackButton } from "@/app/components";
 import PasswordChecker from "@/app/components/password-checker";
 import useAuth from "@/app/hooks/use-auth";
+import { ISignupValues } from "@/app/interfaces/use-auth";
 import { Box, InputLabel, TextField, Typography } from "@mui/material";
 
 const SignUp = () => {
-  const { signupValues, onSignupValuesChange, register } = useAuth({
-    name: "",
-    email: "",
-    password: "",
-    password_confirmation: "",
-    confirm_success_url: "",
+  const { values, onChange, onSubmit } = useAuth({
+    initialValues: {
+      name: "",
+      email: "",
+      password: "",
+      password_confirmation: "",
+      confirm_success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/auth/signin`,
+    },
+    formType: "register",
   });
 
   const isFormIncomplete = (): boolean =>
     !(
-      signupValues.password.match(
+      values.password.match(
         /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$/
-      ) && signupValues.password_confirmation === signupValues.password
+      ) && (values as ISignupValues).password_confirmation === values.password
     );
   return (
     <Box
@@ -26,7 +30,7 @@ const SignUp = () => {
       justifyContent="center"
       alignItems="center"
       py="4rem"
-      onSubmit={register}
+      onSubmit={onSubmit}
       px={{ xs: "3rem", md: "0" }}
     >
       <Box
@@ -48,13 +52,14 @@ const SignUp = () => {
             Name
           </InputLabel>
           <TextField
+            required
             name="name"
             type="text"
             fullWidth
             size="small"
             variant="outlined"
-            value={signupValues.name}
-            onChange={onSignupValuesChange}
+            value={(values as ISignupValues).name}
+            onChange={onChange}
             sx={{ "& > div:first-of-type": { borderRadius: "8px" } }}
           />
         </Box>
@@ -63,13 +68,14 @@ const SignUp = () => {
             Email
           </InputLabel>
           <TextField
+            required
             name="email"
             type="email"
             fullWidth
             size="small"
             variant="outlined"
-            value={signupValues.email}
-            onChange={onSignupValuesChange}
+            value={values.email}
+            onChange={onChange}
             sx={{ "& > div:first-of-type": { borderRadius: "8px" } }}
           />
         </Box>
@@ -78,31 +84,33 @@ const SignUp = () => {
             Password
           </InputLabel>
           <TextField
+            required
             name="password"
             type="password"
             fullWidth
             size="small"
             variant="outlined"
             sx={{ "& > div:first-of-type": { borderRadius: "8px" } }}
-            value={signupValues.password}
-            onChange={onSignupValuesChange}
+            value={values.password}
+            onChange={onChange}
           />
         </Box>
         <Box display="flex" flexDirection="column" width="100%" my=".5rem">
-          <PasswordChecker value={signupValues.password} />
+          <PasswordChecker value={values.password} />
         </Box>
         <Box display="flex" flexDirection="column" width="100%" my=".5rem">
           <InputLabel shrink htmlFor="email">
             Confirm Password
           </InputLabel>
           <TextField
+            required
             name="password_confirmation"
             type="password"
             fullWidth
             size="small"
             variant="outlined"
-            value={signupValues.password_confirmation}
-            onChange={onSignupValuesChange}
+            value={(values as ISignupValues).password_confirmation}
+            onChange={onChange}
             sx={{ "& > div:first-of-type": { borderRadius: "8px" } }}
           />
         </Box>

@@ -1,11 +1,41 @@
-import { configureStore } from '@reduxjs/toolkit'
-import usersReducer from './user'
+import { configureStore } from "@reduxjs/toolkit";
+import usersReducer from "./user";
+import {
+  FLUSH,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+  REHYDRATE,
+  persistReducer,
+  persistStore,
+} from "redux-persist";
+import storage from "redux-persist/lib/storage";
+import { PersistConfig, Persistor } from "redux-persist/es/types";
+import { IUserState } from "../interfaces/user";
 
-export const store = configureStore({
+const persistConfig: PersistConfig<IUserState> = {
+  key: "root",
+  storage,
+};
+
+const persistedUserReducer = persistReducer(persistConfig, usersReducer);
+
+const store = configureStore({
   reducer: {
-    users: usersReducer,
-  }
-})
+    user: persistedUserReducer,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
+});
 
-export type RootState = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch
+const persistor: Persistor = persistStore(store);
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
+
+export { store, persistor };

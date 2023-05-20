@@ -1,14 +1,7 @@
 import { toast } from "react-hot-toast";
 
-type TMakeToastInput = {
-  message: string;
-  type: "success" | "error";
-};
+export const successToast = (message: string): string =>
+  toast.success(message, { duration: 5000 });
 
-export const makeToast = ({ message, type }: TMakeToastInput): void => {
-  toast[type](message);
-};
-
-export const successToast = (message: string): string => toast.success(message);
-
-export const errorToast = (message: string): string => toast.error(message);
+export const errorToast = (message: string): string =>
+  toast.error(message || "Error", { duration: 5000 });

@@ -1,39 +1,57 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import { signUp } from "../api/auth";
 import { errorToast, successToast } from "../utils/toast";
+import { signIn, signUp } from "../api/auth";
+import {
+  ISigninValues,
+  ISignupValues,
+  IUseAuth,
+  IUseAuthProps,
+} from "../interfaces/use-auth";
+import { useRouter } from "next/navigation";
+import { LoginPath } from "../constants/routes";
+import { SignupSuccess } from "../constants/messages";
+import { useAppDispatch } from "./use-store";
+import { addUser } from "../store/user";
 
-interface ISignupValues {
-  name: string;
-  email: string;
-  password: string;
-  password_confirmation: string;
-  confirm_success_url: string;
-}
+const useAuth = ({ initialValues, formType }: IUseAuthProps): IUseAuth => {
+  const [values, setValues] = useState<ISigninValues | ISignupValues>(
+    initialValues
+  );
+  const { push } = useRouter();
+  const loginUser = useAppDispatch();
 
-const useAuth = (initialValues: ISignupValues) => {
-  const [signupValues, setSignupValues] =
-    useState<ISignupValues>(initialValues);
-
-  const onSignupValuesChange = (event: ChangeEvent<HTMLInputElement>): void => {
+  const onChange = (event: ChangeEvent<HTMLInputElement>): void => {
     const { value, name } = event.target;
-    setSignupValues((prev) => ({ ...prev, [name]: value }));
+    setValues((prev) => ({ ...prev, [name]: value }));
   };
 
-  const register = async (event: FormEvent) => {
+  const onSubmit = async (event: FormEvent): Promise<void> => {
     event.preventDefault();
 
-    try {
-      const { data } = await signUp<ISignupValues>(signupValues);
-      successToast("User signed up successfully");
-    } catch (error: any) {
-      errorToast(error.response.data.errors.full_messages.join());
+    if (formType === "register") {
+      try {
+        const { data } = await signUp<ISignupValues>(values as ISignupValues);
+        successToast(SignupSuccess(values.email));
+        await push(LoginPath);
+      } catch (error: any) {
+        errorToast(error.response.data.errors.full_messages.join());
+      }
+    } else {
+      try {
+        const {
+          data: { data },
+        } = await signIn<ISigninValues>(values as ISigninValues);
+        loginUser(addUser(data));
+      } catch (error: any) {
+        errorToast(error?.response?.data?.errors);
+      }
     }
   };
 
   return {
-    signupValues,
-    onSignupValuesChange,
-    register,
+    values,
+    onChange,
+    onSubmit,
   };
 };
 
