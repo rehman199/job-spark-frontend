@@ -30,7 +30,7 @@ const useAuth = ({ initialValues, formType }: IUseAuthProps): IUseAuth => {
 
     if (formType === "register") {
       try {
-        const { data } = await signUp<ISignupValues>(values as ISignupValues);
+        await signUp<ISignupValues>(values as ISignupValues);
         successToast(SignupSuccess(values.email));
         await push(LoginPath);
       } catch (error: any) {
@@ -42,6 +42,8 @@ const useAuth = ({ initialValues, formType }: IUseAuthProps): IUseAuth => {
           data: { data },
         } = await signIn<ISigninValues>(values as ISigninValues);
         loginUser(addUser(data));
+        // TODO: Give appropriate constant path to push function later
+        push("/jobs");
       } catch (error: any) {
         errorToast(error?.response?.data?.errors);
       }

@@ -1,7 +1,5 @@
 import SignUp from "@/app/auth/signup/sign-up";
 
-const SignUpPage = () => {
+export default function SignUpPage() {
   return <SignUp />;
-};
-
-export default SignUpPage;
+}

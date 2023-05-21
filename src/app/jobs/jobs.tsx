@@ -4,6 +4,7 @@ import { uniqueId } from "lodash";
 import React, { useState } from "react";
 import JobFilters from "./job-filters";
 import Job from "./job";
+import withAuth from "../hoc/withAuth";
 
 const Jobs = () => {
   const [page, updatePage] = useState<number>(1);
@@ -46,4 +47,4 @@ const Jobs = () => {
   );
 };
 
-export default Jobs;
+export default withAuth(Jobs);

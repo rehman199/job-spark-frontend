@@ -12,8 +12,15 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
+import Link from "next/link";
+import { SignIn, SignUp } from "../constants/api routes/auth";
+import { LoginPath, SignUpPath } from "../constants/routes";
+import LinkWrapper from "./link";
 
-const pages = ["Login", "Signup"];
+const pages = [
+  { href: LoginPath, label: "Login" },
+  { href: SignUpPath, label: "Signup" },
+];
 
 function Navbar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -98,9 +105,11 @@ function Navbar() {
             >
               {!isAuthPage &&
                 pages.map((page) => (
-                  <MenuItem key={page} onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center">{page}</Typography>
-                  </MenuItem>
+                  <LinkWrapper href={page.href} key={page.label}>
+                    <MenuItem onClick={handleCloseNavMenu}>
+                      <Typography textAlign="center">{page.label}</Typography>
+                    </MenuItem>
+                  </LinkWrapper>
                 ))}
             </Menu>
           </Box>
@@ -132,18 +141,20 @@ function Navbar() {
           >
             {!isAuthPage &&
               pages.map((page) => (
-                <Button
-                  key={page}
-                  onClick={handleCloseNavMenu}
-                  sx={{
-                    my: 2,
-                    color: "#8A8A8A",
-                    display: "block",
-                    textTransform: "none",
-                  }}
-                >
-                  {page}
-                </Button>
+                <LinkWrapper href={page.href} key={page.label}>
+                  <Button
+                    key={page.label}
+                    onClick={handleCloseNavMenu}
+                    sx={{
+                      my: 2,
+                      color: "#8A8A8A",
+                      display: "block",
+                      textTransform: "none",
+                    }}
+                  >
+                    {page.label}
+                  </Button>
+                </LinkWrapper>
               ))}
           </Box>
 

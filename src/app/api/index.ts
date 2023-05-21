@@ -1,7 +1,5 @@
 import axios, { AxiosResponseHeaders } from "axios";
-import { store } from "../store";
-import { setTokens } from "../store/user";
-import { IUserToken } from "../interfaces/user";
+import { authCookiesArePresent, getCookie } from "../utils/cookies-helper";
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -9,14 +7,12 @@ const api = axios.create({
 
 api.interceptors.request.use(
   function (config) {
-    const tokens = store.getState().user?.tokens as IUserToken;
-
-    if (tokens) {
-      config.headers["uid"] = tokens.uid;
-      config.headers["expiry"] = tokens.expiry;
-      config.headers["access-token"] = tokens.access_token;
-      config.headers["client"] = tokens.client;
-      config.headers["token-type"] = tokens.token_type;
+    if (authCookiesArePresent()) {
+      config.headers["uid"] = getCookie("uid");
+      config.headers["expiry"] = getCookie("expiry");
+      config.headers["access-token"] = getCookie("access-token");
+      config.headers["client"] = getCookie("client");
+      config.headers["token-type"] = getCookie("token-type");
     }
 
     return config;
@@ -28,16 +24,9 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
   function (response) {
-    if (authTokensArePresent(response.headers))
-      store.dispatch(
-        setTokens({
-          uid: response.headers["uid"],
-          expiry: response.headers["expiry"],
-          access_token: response.headers["access-token"],
-          client: response.headers["client"],
-          token_type: response.headers["token-type"],
-        })
-      );
+    if (authTokensArePresent(response.headers)) {
+      addAuthTokenToCookies(response.headers);
+    }
 
     return response;
   },
@@ -54,5 +43,15 @@ const authTokensArePresent = (
   !!headers["expiry"] &&
   !!headers["access-token"] &&
   !!headers["token-type"];
+
+const addAuthTokenToCookies = (headers: Partial<AxiosResponseHeaders>) => {
+  const expiryDate = new Date(headers["expiry"] * 1000).toUTCString();
+
+  document.cookie = `uid=${headers["uid"]}; expires=${expiryDate}; path=/`;
+  document.cookie = `access-token=${headers["access-token"]}; expires=${expiryDate}; path=/`;
+  document.cookie = `expiry=${headers["expiry"]}; expires=${expiryDate}; path=/`;
+  document.cookie = `client=${headers["client"]}; expires=${expiryDate}; path=/`;
+  document.cookie = `token-type=${headers["token-type"]}; expires=${expiryDate}; path=/`;
+};
 
 export default api;
