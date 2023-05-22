@@ -11,7 +11,7 @@ export default function withRedirect<T>(Component: React.ComponentType<T>) {
     if (authCookiesArePresent()) {
       // TODO: Give appropriate constant path to push function later
       push("/jobs");
-      return <Loader />;
+      return <Loader loading />;
     }
 
     return <Component {...props} />;

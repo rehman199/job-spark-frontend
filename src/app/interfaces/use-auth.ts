@@ -15,6 +15,7 @@ export interface IUseAuth {
   values: ISignupValues | ISigninValues;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   onSubmit: (event: FormEvent) => Promise<void>;
+  loading: boolean;
 }
 
 export interface IUseAuthProps {
