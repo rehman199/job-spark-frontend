@@ -4,7 +4,6 @@ import { IUserState } from "../interfaces/user";
 const initialState: IUserState = {
   user: null,
   loggedIn: false,
-  tokens: null,
 };
 
 export const userSlice = createSlice({
@@ -15,17 +14,13 @@ export const userSlice = createSlice({
       state.user = action.payload;
       state.loggedIn = true;
     },
-    setTokens(state, action: PayloadAction<IUserState["tokens"]>) {
-      state.tokens = action.payload;
-    },
     logoutUser(state) {
       state.user = null;
       state.loggedIn = false;
-      state.tokens = null;
     },
   },
 });
 
-export const { addUser, setTokens, logoutUser } = userSlice.actions;
+export const { addUser, logoutUser } = userSlice.actions;
 
 export default userSlice.reducer;
