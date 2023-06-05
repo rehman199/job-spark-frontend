@@ -1,11 +1,3 @@
-export interface IUserToken {
-  uid: string;
-  client: string;
-  access_token: string;
-  expiry: number;
-  token_type: string;
-}
-
 export interface TUser {
   allow_password_change: boolean;
   email: string;
@@ -18,5 +10,4 @@ export interface TUser {
 export interface IUserState {
   user: TUser | null;
   loggedIn: boolean;
-  tokens: IUserToken | null;
 }

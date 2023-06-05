@@ -37,7 +37,8 @@ const useAuth = ({ initialValues, formType }: IUseAuthProps): IUseAuth => {
         successToast(SignupSuccess(values.email));
         await push(LoginPath);
       } catch (error: any) {
-        errorToast(error.response.data.errors.full_messages.join());
+        debugger;
+        errorToast(error?.response?.data?.errors?.full_messages?.join());
       }
     } else {
       try {
@@ -46,7 +47,7 @@ const useAuth = ({ initialValues, formType }: IUseAuthProps): IUseAuth => {
         } = await signIn<ISigninValues>(values as ISigninValues);
         loginUser(addUser(data));
         // TODO: Give appropriate constant path to push function later
-        await push("/jobs");
+        await push("/");
       } catch (error: any) {
         errorToast(error?.response?.data?.errors);
       }
